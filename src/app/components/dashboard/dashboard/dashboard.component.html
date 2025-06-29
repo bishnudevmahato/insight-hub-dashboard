@@ -151,7 +151,8 @@
         <!-- Edit Popup Modal -->
         <div class="edit-modal" *ngIf="editingIndex !== null || newUser">
             <div class="modal-content">
-                <h3>Edit Team Member</h3>
+                <h3 *ngIf="!newUser">Edit Team Member</h3>
+                <h3 *ngIf="newUser">Add New Member</h3>
                 <div class="edit-form">
                     <input [(ngModel)]="editableRow['name'].first_name" placeholder="First Name" />
                     <input [(ngModel)]="editableRow['name'].last_name" placeholder="Last Name" />
