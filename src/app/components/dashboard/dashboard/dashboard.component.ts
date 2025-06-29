@@ -62,23 +62,6 @@ export class DashboardComponent implements OnInit {
     }
   };
 
-  // FusionCharts data
-  // fusionChartData = {
-  //   chart: {
-  //     caption: 'Vendors Monitored',
-  //     subCaption: '80% Active',
-  //     theme: 'fusion',
-  //     doughnutRadius: '60%',
-  //     showPercentValues: '1',
-  //     showLegend: '0',
-  //     showCredits: '0' // hides credits watermark
-  //   },
-  //   data: [
-  //     { label: 'Active', value: '80' },
-  //     { label: 'Inactive', value: '20' }
-  //   ]
-  // };
-
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {

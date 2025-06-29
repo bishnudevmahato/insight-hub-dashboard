@@ -1,23 +1,23 @@
-# FY25 Dashboard UI
+## Insight Hub Dashboard UI
 
 A responsive and modern admin dashboard built with Angular 19. Includes chart integrations using Highcharts and FusionCharts, local CRUD operations, and a clean user interface.
 
 ---
 
-## 🚀 Features
+## Features
 
-- ✅ Responsive layout
-- 📊 Highcharts integration
-- 🔘 FusionCharts donut chart
-- 📋 Custom table/grid with:
+- Responsive layout
+- Highcharts integration
+- FusionCharts donut chart
+- Custom table/grid with:
   - Add / Edit / Delete rows (local)
   - Pagination
   - Inline editing with popups
-- 🎨 Modern SCSS-based design
+- Modern SCSS-based design
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - Angular 19 (Standalone Components)
 - SCSS
@@ -27,7 +27,7 @@ A responsive and modern admin dashboard built with Angular 19. Includes chart in
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```bash
 # Clone the repository
@@ -37,7 +37,7 @@ git clone https://github.com/bishnudevmahato/insight-hub-dashboard.git
 cd insight-hub-dashboard
 
 # Install dependencies
-npm install
+npm install / npm install --force
 
 # Run the development server
 ng serve
