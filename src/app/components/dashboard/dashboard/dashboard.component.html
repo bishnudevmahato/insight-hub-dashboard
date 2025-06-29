@@ -1,0 +1,189 @@
+<div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-txt">Loading...</div>
+    </div>
+</div>
+
+<div *ngIf="!isLoading" class="dashboard">
+
+    <!-- Charts Section -->
+    <section class="charts-area">
+        <!-- Highcharts Block -->
+
+        <!-- 1st chard hardcoded block -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Monthly License Usage</h3>
+            </div>
+            <highcharts-chart [Highcharts]="Highcharts" [options]="highChartOptions"
+                style="width: 100%; height: 300px; display: block">
+            </highcharts-chart>
+            <div class="chart-footer">
+                <button (click)="openFullChart()">View full report</button>
+            </div>
+        </div>
+
+        <!-- 2nd Chart inline hard coded block -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Customer Growth</h3>
+            </div>
+            <highcharts-chart [Highcharts]="Highcharts" [options]="{
+          chart: { type: 'line' },
+          title: { text: '' },
+          xAxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May'] },
+          series: [{
+            name: 'Customers',
+            type: 'line',
+            data: [120, 150, 180, 160, 190]
+          }]
+        }" style="width: 100%; height: 300px; display: block">
+            </highcharts-chart>
+
+            <div class="chart-footer">
+                <button>Upgrade lan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full Screen Modal Chart -->
+    <div class="chart-modal" *ngIf="showFullChart">
+        <div class="chart-modal-content" (click)="$event.stopPropagation()">
+            <div class="chart-model-header">
+                <h3>Full Monthly License Usage Chart</h3>
+                <button class="close-button" (click)="closeFullChart()">❌</button>
+            </div>
+            <highcharts-chart [Highcharts]="Highcharts" [options]="highChartOptions"
+                style="width: 100%; height: calc(100vh - 150px); display: block">
+            </highcharts-chart>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <section class="grid-section">
+        <div class="grid-header">
+            Team Members &nbsp;
+            <div class="total-member">{{rows.length}}</div>
+        </div>
+        <table class="data-grid">
+            <thead>
+                <tr>
+                    <th class="checkbox"><input type="checkbox" [(ngModel)]="selectAll"
+                            (change)="toggleAllSelection()" /></th>
+                    <th class="user-name" *ngFor="let col of columns">{{ col.column_name }}</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of displayedRows; let i = index">
+                    <td class="checkbox"><input type="checkbox" [(ngModel)]="row.selected" /></td>
+
+                    <td *ngFor="let col of columns">
+                        <ng-container *ngIf="editingIndex === i; else normalCell">
+                            <input [(ngModel)]="row[col.column_key]" [name]="col.column_key + i" />
+                        </ng-container>
+
+                        <ng-template #normalCell>
+                            <!-- Name Column -->
+                            <ng-container *ngIf="col.column_key === 'name'">
+                                <div class="user-cell">
+                                    <div class="avatar">
+                                        {{ row['name']?.first_name?.charAt(0) }}
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="name">{{ row['name']?.first_name }} {{ row['name']?.last_name }}
+                                        </div>
+                                        <div class="handle">{{ row['name']?.handle }}</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <!-- Status -->
+                            <ng-container *ngIf="col.column_key === 'status'">
+                                <span class="badge" [ngClass]="row['status']">{{ row['status'] }}</span>
+                            </ng-container>
+
+                            <!-- License Use -->
+                            <ng-container *ngIf="col.column_key === 'license_used'">
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="fill" [style.width.%]="row['license_used']"></div>
+                                    </div>
+                                    <span>{{ row['license_used'] }}%</span>
+                                </div>
+                            </ng-container>
+
+                            <!-- Teams -->
+                            <ng-container *ngIf="col.column_key === 'teams'">
+                                <div class="team-tags">
+                                    <span class="team-badge" *ngFor="let team of row['teams']"
+                                        [style.backgroundColor]="team.background_color" [style.color]="team.text_color">
+                                        {{ team.value }}
+                                    </span>
+                                </div>
+                            </ng-container>
+
+
+                            <!-- Default fallback -->
+                            <ng-container
+                                *ngIf="col.column_key !== 'name' && col.column_key !== 'status' && col.column_key !== 'license_used' && col.column_key !== 'teams'">
+                                {{ row[col.column_key] }}
+                            </ng-container>
+                        </ng-template>
+                    </td>
+
+
+
+                    <td>
+                        <ng-container *ngIf="editingIndex !== i;">
+                            <button class="delete-icon" (click)="deleteRow(i)">🗑️</button>
+                            <button class="eidt-icon" (click)="editRow(i)">✏️</button>
+                        </ng-container>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Edit Popup Modal -->
+        <div class="edit-modal" *ngIf="editingIndex !== null || newUser">
+            <div class="modal-content">
+                <h3>Edit Team Member</h3>
+                <div class="edit-form">
+                    <input [(ngModel)]="editableRow['name'].first_name" placeholder="First Name" />
+                    <input [(ngModel)]="editableRow['name'].last_name" placeholder="Last Name" />
+                    <input [(ngModel)]="editableRow['name'].handle" placeholder="Handle" />
+                    <input [(ngModel)]="editableRow['role']" placeholder="Role" />
+                    <input [(ngModel)]="editableRow['status']" placeholder="Status" />
+                    <input [(ngModel)]="editableRow['license_used']" type="number" placeholder="License Used" />
+                    <input [(ngModel)]="teamsInput" placeholder="Teams (comma separated)" />
+                </div>
+
+                <div class="modal-buttons">
+                    <button (click)="saveEdit()">Update</button>
+                    <button (click)="cancelEdit()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add new user -->
+        <div class="new-user">
+            <button (click)="addUsed()">ADD Users</button>
+        </div>
+
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button (click)="prevPage()" [disabled]="currentPage === 1">⬅ Prev</button>
+
+            <div class="page-numbers">
+                <span *ngFor="let page of totalPages()" [class.active]="page === currentPage" (click)="goToPage(page)">
+                    {{ page }}
+                </span>
+            </div>
+
+            <button (click)="nextPage()" [disabled]="(currentPage * rowsPerPage) >= rows.length">Next ➡</button>
+        </div>
+    </section>
+
+</div>

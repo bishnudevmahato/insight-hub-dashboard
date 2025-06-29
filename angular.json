@@ -14,7 +14,7 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
-        "build": {
+        "build": {        
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/fy25-dashboard",
@@ -26,15 +26,17 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/fusioncharts/fusioncharts.js",
+              "node_modules/fusioncharts/fusioncharts.charts.js",
+              "node_modules/fusioncharts/themes/fusioncharts.theme.fusion.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -85,10 +87,8 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
@@ -98,5 +98,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "b1eaf659-8189-4f0b-9b2e-de891b2162d1"
   }
 }
